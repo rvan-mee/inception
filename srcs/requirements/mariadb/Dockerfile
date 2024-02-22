@@ -1,11 +1,5 @@
-FROM debian:bullseye
+FROM debian:buster
 EXPOSE 3306
-
-ENV MYSQL_DATABASE=$DB_NAME
-ENV MYSQL_USER=$DB_USER
-ENV MYSQL_PASSWORD=$DB_PASS
-ENV MYSQL_ROOT_PASSWORD=$DB_ROOT_PASS
-# CHANGE THIS ^^^^ TO BE SET IN THE COMPOSE FILE, wont be inside the image then and is more secure
 
 # update apt and install mariadb
 RUN apt-get -y update && apt-get -y upgrade && apt-get -y install mariadb-server
@@ -16,8 +10,8 @@ RUN chmod +x /boot.sh
 
 RUN mkdir -p /var/run/mysqld; chown -R mysql:root /var/run/mysqld
 
-RUN sed 's/bind-address            = 127.0.0.1/bind-address            = 0.0.0.0/' \
-	-i /etc/mysql/mariadb.conf.d/50-server.cnf
+# Allows wordpress to connect using the name mariadb otherwise error establishing database connection
+RUN sed 's/bind-address .*/bind-address = mariadb/' -i /etc/mysql/mariadb.conf.d/50-server.cnf
 
 # we set the script as entrypoint
 ENTRYPOINT [ "/boot.sh" ]

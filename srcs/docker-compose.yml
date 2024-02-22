@@ -1,0 +1,83 @@
+services:
+  wordpress:
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    container_name: wordpress
+    build: requirements/wordpress
+    volumes:
+      - html:/var/www/html
+    restart: always
+    # networks:
+    #   - dbToWordpress
+    #   - wordpressToNginx
+    networks:
+      - default
+    environment:
+      - DB_NAME=${DB_NAME}
+      - DB_HOST=${DB_HOST}
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
+      - WP_ADMIN_NAME=${WP_ADMIN_NAME}
+      - WP_ADMIN_PASS=${WP_ADMIN_PASS}
+      - WP_USER_NAME=${WP_USER_NAME}
+      - WP_USER_PASS=${WP_USER_PASS}
+
+  mariadb:
+    container_name: mariadb
+    build: requirements/mariadb
+    volumes:
+      - database:/var/lib/mysql
+    # networks:
+    #   - dbToWordpress
+    networks:
+      - default
+    restart: always
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+    environment:
+      - DB_NAME=${DB_NAME}
+      - DB_HOST=${DB_HOST}
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
+
+  nginx:
+    depends_on:
+      - wordpress
+    container_name: nginx
+    build: requirements/nginx
+    volumes:
+      - html:/var/www/html
+    ports:
+      - "443:443"
+    networks:
+      - default
+    # networks:
+    #   - wordpressToNginx
+    restart: always
+
+# networks:
+#   dbToWordpress:
+#     name: suffering
+#   wordpressToNginx:
+#     name: agony
+
+networks:
+  default:
+    name: inception
+
+volumes:
+  database:
+    driver_opts:
+      type: none
+      o: bind
+      device: ${HOME}/data/db
+  html:
+    driver_opts:
+      type: none
+      o: bind
+      device: ${HOME}/data/wp
+
+# driver: bridge # isolated network between all containers ??
