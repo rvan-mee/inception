@@ -12,7 +12,7 @@ run:
 	@mkdir -p ${HOME}/data
 	@mkdir -p ${HOME}/data/db
 	@mkdir -p ${HOME}/data/wp
-	@docker compose -f $(COMPOSE_FILE) up --remove-orphans
+	@docker compose -f $(COMPOSE_FILE) up --remove-orphans # -d
 
 stop:
 	@docker compose -f $(COMPOSE_FILE) stop

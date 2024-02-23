@@ -1,22 +1,21 @@
 #!/bin/bash
 
+# Navigate to the WordPress directory
+# Somehow this fixes the error: HP Warning:  file_get_contents(phar://wp-cli.phar/vendor/wp-cli/wp-cli/templates/phar://usr/local/bin/wp/vendor/wp-cli/config-command/templates/wp-config.mustache): failed to open stream: phar error: "vendor/wp-cli/wp-cli/templates/phar:/usr/local/bin/wp/vendor/wp-cli/config-command/templates/wp-config.mustache" is not a file in phar "wp-cli.phar" in phar:///usr/local/bin/wp/vendor/wp-cli/wp-cli/php/utils.php on line 608
+cd /var/www/html
+
 # Check if WordPress is already installed
 if [ -f wp-login.php ]
 then
-    echo "Wordpress is already installed"
+    echo "WordPress is already installed"
 else
     wp core download --path="/var/www/html" --allow-root
 fi
 
 # Check if WordPress is already configured
-if [ -f "/var/www/html/wp-config.php" ]; then
-    echo "WordPress already installed and set up"
+if [ -f wp-config.php ]; then
+    echo "WordPress is already configured"
 else
-
-    # Navigate to the WordPress directory
-    # Somehow this fixes the error: HP Warning:  file_get_contents(phar://wp-cli.phar/vendor/wp-cli/wp-cli/templates/phar://usr/local/bin/wp/vendor/wp-cli/config-command/templates/wp-config.mustache): failed to open stream: phar error: "vendor/wp-cli/wp-cli/templates/phar:/usr/local/bin/wp/vendor/wp-cli/config-command/templates/wp-config.mustache" is not a file in phar "wp-cli.phar" in phar:///usr/local/bin/wp/vendor/wp-cli/wp-cli/php/utils.php on line 608
-    cd var/www/html
-
     echo "Creating Wordpress config..."
 
     timeout=0

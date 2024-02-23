@@ -8,11 +8,11 @@ services:
     volumes:
       - html:/var/www/html
     restart: always
-    # networks:
-    #   - dbToWordpress
-    #   - wordpressToNginx
     networks:
-      - default
+      - dbToWordpress
+      - wordpressToNginx
+    # networks:
+      # - default
     environment:
       - DB_NAME=${DB_NAME}
       - DB_HOST=${DB_HOST}
@@ -28,10 +28,10 @@ services:
     build: requirements/mariadb
     volumes:
       - database:/var/lib/mysql
-    # networks:
-    #   - dbToWordpress
     networks:
-      - default
+      - dbToWordpress
+    # networks:
+      # - default
     restart: always
     healthcheck:
       test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
@@ -52,21 +52,21 @@ services:
       - html:/var/www/html
     ports:
       - "443:443"
-    networks:
-      - default
     # networks:
-    #   - wordpressToNginx
+    #   - default
+    networks:
+      - wordpressToNginx
     restart: always
 
-# networks:
-#   dbToWordpress:
-#     name: suffering
-#   wordpressToNginx:
-#     name: agony
-
 networks:
-  default:
-    name: inception
+  dbToWordpress:
+    name: suffering
+  wordpressToNginx:
+    name: agony
+
+# networks:
+#   default:
+#     name: inception
 
 volumes:
   database:

@@ -1,5 +1,5 @@
 FROM debian:bullseye
-
+EXPOSE 9000
 
 # fpm -> (FastCGI Proccess Manager)
 RUN apt-get -y update && apt-get -y upgrade && \
