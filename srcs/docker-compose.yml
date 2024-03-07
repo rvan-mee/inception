@@ -67,5 +67,3 @@ volumes:
       type: none
       o: bind
       device: ${HOME}/data/wp
-
-# driver: bridge # isolated network between all containers ??
