@@ -9,10 +9,7 @@ services:
       - html:/var/www/html
     restart: always
     networks:
-      - dbToWordpress
-      - wordpressToNginx
-    # networks:
-      # - default
+      - default
     environment:
       - DB_NAME=${DB_NAME}
       - DB_HOST=${DB_HOST}
@@ -29,9 +26,7 @@ services:
     volumes:
       - database:/var/lib/mysql
     networks:
-      - dbToWordpress
-    # networks:
-      # - default
+      - default
     restart: always
     healthcheck:
       test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
@@ -52,21 +47,14 @@ services:
       - html:/var/www/html
     ports:
       - "443:443"
-    # networks:
-    #   - default
     networks:
-      - wordpressToNginx
+      - default
     restart: always
 
 networks:
-  dbToWordpress:
+  default:
     name: suffering
-  wordpressToNginx:
-    name: agony
-
-# networks:
-#   default:
-#     name: inception
+    driver: bridge
 
 volumes:
   database:

@@ -5,7 +5,7 @@ RUN apt-get update && \
     apt-get -y install nginx openssl
 
 # copy the config file into the image
-COPY tools/nginx.conf /etc/nginx/conf.d/default.conf
+COPY config/nginx.conf /etc/nginx/conf.d/default.conf
 
 COPY tools/boot.sh /
 RUN chmod +x /boot.sh

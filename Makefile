@@ -2,7 +2,10 @@ COMPOSE_FILE = srcs/docker-compose.yml
 
 all: build run
 
-build:
+env:
+	cp srcs/.env_example srcs/.env
+
+build: env
 	@mkdir -p ${HOME}/data
 	@mkdir -p ${HOME}/data/db
 	@mkdir -p ${HOME}/data/wp
@@ -12,7 +15,7 @@ run:
 	@mkdir -p ${HOME}/data
 	@mkdir -p ${HOME}/data/db
 	@mkdir -p ${HOME}/data/wp
-	@docker compose -f $(COMPOSE_FILE) up --remove-orphans # -d
+	@docker compose -f $(COMPOSE_FILE) up --remove-orphans #-d
 
 stop:
 	@docker compose -f $(COMPOSE_FILE) stop
